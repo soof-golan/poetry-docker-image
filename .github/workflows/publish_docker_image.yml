@@ -53,7 +53,7 @@ jobs:
           flavor: |
               latest=auto
 
-      - name: 🛠 Build and 🚀 Push Python With Poetry ${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version }} Docker image
+      - name: 🛠 Build and 🚀 Push Python ${{ matrix.python-version }}${{ matrix.python-runtime }} with poetry==${{ matrix.poetry-version }} Docker image
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
           context: .
