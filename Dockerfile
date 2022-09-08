@@ -1,8 +1,8 @@
-ARG PYTHON_VERSION=3.10
+ARG PYTHON_VERSION
 
 FROM python:$PYTHON_VERSION as python-base
 
-ARG POETRY_VERSION=1.2.0
+ARG POETRY_VERSION
 
 # https://python-poetry.org/docs#ci-recommendations
 ENV POETRY_HOME=/opt/poetry
