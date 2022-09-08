@@ -17,29 +17,29 @@ jobs:
         poetry-version: [ '', '1.2.0' ]
         python-runtime: [ '', '-slim', '-alpine']
     steps:
-      - name: Check out the repo
+      - name: ⬇️ Check out the repo
         uses: actions/checkout@v3
       -
-        name: Set up QEMU
+        name: 🐳 Set up QEMU
         uses: docker/setup-qemu-action@v2
       -
-        name: Set up Docker Buildx
+        name: 🐳 Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
         with:
           install: true
       -
-        name: Available platforms
+        name: ⚡️ Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
 
-      - name: Log in to Docker Hub
+      - name: 🔐 Log in to Docker Hub
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
         if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: 📦 Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a
         with:
@@ -51,7 +51,7 @@ jobs:
               latest=auto
               prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version }}
 
-      - name: Build and push ${{ matrix.python-version }}${{ matrix.python-runtime }}-${{ matrix.poetry-version }} Docker image
+      - name: 🛠 Build and 🚀 Push Python ${{ matrix.python-version }}${{ matrix.python-runtime }} Poetry ${{ matrix.poetry-version }} Docker image
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
           context: .
