@@ -16,8 +16,27 @@ ENV PATH="${PATH}:${POETRY_VENV}/bin"
 # Tell Poetry where to place its cache and virtual environment
 ENV POETRY_CACHE_DIR=/opt/.cache
 
+FROM python-base as ensure-gcc
+
+# Support both Alpine and Ubuntu
+# It is probably not the best idea to just blindly
+# attempt installing gcc with both `apk` and `apt`
+# and hoping for the best.
+# Suggestions for better approaches are welcome :)
+RUN ( \
+    apk update  \
+    && apk add  \
+        gcc  \
+        musl-dev  \
+        libffi-dev \
+    ) || (  \
+    apt-get update  \
+    && apt-get install -y --no-install-recommends  \
+        gcc \
+    )
+
 # Create stage for Poetry installation
-FROM python-base as poetry-base
+FROM ensure-gcc as poetry-base
 
 # Creating a virtual environment just for poetry and install it with pip
 RUN python3 -m venv $POETRY_VENV \
