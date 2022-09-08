@@ -11,10 +11,9 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --without dev
 RUN poetry check
-
-COPY . /app
+RUN poetry lock --check
+RUN poetry install --without dev
 
 CMD [ "poetry", "run", "python", "-c", "print('Hello, World! 🌍')" ]
 ```
