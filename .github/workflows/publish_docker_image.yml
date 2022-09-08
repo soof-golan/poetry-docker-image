@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         python-version: [ 'latest', '3.11', '3.10', '3.9', '3.8', '3.7' ]
-        poetry-version: [ '', '1.2.0' ]
+        poetry-version: [ '1.2.0' ]
         python-runtime: [ '', '-slim', '-alpine']
     steps:
       - name: ⬇️ Check out the repo
@@ -45,13 +45,15 @@ jobs:
         with:
           images: soofgolan/poetry
           tags: |
-            type=schedule
-            type=sha
+            type=schedule,prefix={{branch}}-,pattern={{date 'YYYYMMDD'}}
+            type=sha,prefix={{branch}}-
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=${{ matrix.python-version }}${{ matrix.python-runtime }}
           flavor: |
               latest=auto
-              prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version ? '-' : '' }}${{ matrix.poetry-version }}
 
-      - name: 🛠 Build and 🚀 Push Python ${{ matrix.python-version }}${{ matrix.python-runtime }} Poetry ${{ matrix.poetry-version }} Docker image
+      - name: 🛠 Build and 🚀 Push Python With Poetry ${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version }} Docker image
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
           context: .
