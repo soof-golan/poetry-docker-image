@@ -37,9 +37,9 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=sha
-            flavor: |
+          flavor: |
               latest=auto
-              prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}-${{ matrix.poetry-version }}
+              prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version }}
 
       - name: Build and push ${{ matrix.python-version }}${{ matrix.python-runtime }}-${{ matrix.poetry-version }} Docker image
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
