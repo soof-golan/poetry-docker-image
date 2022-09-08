@@ -5,32 +5,50 @@ on:
     branches:
       - main
   schedule:
-    - cron:  '0 0 1 * *'
+    - cron: '0 0 1 * *'
 
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ 'latest', '3.11', '3.10', '3.9', '3.8', '3.7' ]
+        poetry-version: [ '', '1.2.0' ]
+        python-runtime: [ '', '-slim', '-alpine']
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      
+
       - name: Log in to Docker Hub
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
+        if: github.event_name != 'pull_request'
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a
         with:
           images: soofgolan/poetry
-      
-      - name: Build and push Docker image
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+            flavor: |
+              latest=auto
+              prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}-${{ matrix.poetry-version }}
+
+      - name: Build and push ${{ matrix.python-version }}${{ matrix.python-runtime }}-${{ matrix.poetry-version }} Docker image
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
         with:
           context: .
-          push: true
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            PYTHON_VERSION: ${{ matrix.python-version }}${{ matrix.python-runtime }}
+            POETRY_VERSION: ${{ matrix.poetry-version }}
