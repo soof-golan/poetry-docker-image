@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "helloworld"
+version = "0.1.0"
+description = "Hello world example of python + docker + poetry = ❤️"
+authors = ["Soof Golan"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
