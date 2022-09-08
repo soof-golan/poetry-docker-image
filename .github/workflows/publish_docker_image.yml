@@ -49,7 +49,7 @@ jobs:
             type=sha
           flavor: |
               latest=auto
-              prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version }}
+              prefix=${{ matrix.python-version }}${{ matrix.python-runtime }}${{ matrix.poetry-version ? '-' : '' }}${{ matrix.poetry-version }}
 
       - name: 🛠 Build and 🚀 Push Python ${{ matrix.python-version }}${{ matrix.python-runtime }} Poetry ${{ matrix.poetry-version }} Docker image
         uses: docker/build-push-action@c84f38281176d4c9cdb1626ffafcd6b3911b5d94
