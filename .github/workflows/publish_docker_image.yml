@@ -62,5 +62,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            PYTHON_VERSION: ${{ matrix.python-version }}${{ matrix.python-runtime }}
-            POETRY_VERSION: ${{ matrix.poetry-version }}
+            PYTHON_VERSION=${{ matrix.python-version }}${{ matrix.python-runtime }}
+            POETRY_VERSION=${{ matrix.poetry-version }}
