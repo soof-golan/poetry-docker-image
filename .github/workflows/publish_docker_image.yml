@@ -46,8 +46,6 @@ jobs:
           images: soofgolan/poetry
           tags: |
             type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
             type=sha
           flavor: |
               latest=auto
